@@ -3866,6 +3866,37 @@ void mc_InitRPCHelpMap17()
             + HelpExampleCli("writerecord", "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd, 1B72Smnbz123pXFH29m3CdqATR44Jvayff, 123encrypteddata, 456encryptedkey") 
         ));
 
+    mapHelpStrings.insert(std::make_pair("createbulletinboard",
+            "createbulletinboard\n"
+            "\nWrite entry to record stream \n"
+            "\nArguments:\n"
+            "1. \"from_address\"            (string, required) Address of the creator\n"
+            "2. \"key\"                     (string, required) Root/Address for messages of board\n"
+            "3. \"encrypted-data\"            (string, required) Encrypted JSON data\n"
+            "4. \"encrypted-key\"             (string, required) Encrypted key to decrypt the JSON data\n"
+            "\nExample:\n"
+            + HelpExampleCli("createbulletinboard", "123encrypteddata, 456encryptedkey") 
+        ));
+
+    mapHelpStrings.insert(std::make_pair("writebulletinboardentry",
+            "writebulletinboardentry\n"
+            "\nWrite entry to record stream \n"
+            "\nArguments:\n"
+            "1. \"key\"                     (string, required) Root txid\n"
+            "2. \"encrypted-data\"            (string, required) Encrypted JSON data\n"
+            "\nExample:\n"
+            + HelpExampleCli("writebulletinboardentry", "roottxid, encrypteddata") 
+    ));
+
+    mapHelpStrings.insert(std::make_pair("censormessage",
+            "censormessage \n"
+            "\nWrite entry to record stream \n"
+            "\nArguments:\n"
+            "1. \"key\"                     (string, required)Txid\n"
+            "\nExample:\n"
+            + HelpExampleCli("censormessage ", "txid") 
+    ));
+
     mapHelpStrings.insert(std::make_pair("annotaterecord",
             "annotaterecord\n"
             "\nAnnotate existing record in Records stream \n"
@@ -3969,6 +4000,26 @@ void mc_InitRPCHelpMap17()
         "3. \"badge-issuer-address\"        (string, required) Address to revoke badge issue permission\n"
         "\nExample:\n"
         + HelpExampleCli("revokebadgeissuerpermission", "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd 5d06edd7a0dbd0d83478c25fbf30cf3f07ceac45d9ced1591f6bd982fb878647 144hgKYSWTCXrn889jRvc1MERgdebwChJxdUdG")
+    ));
+    mapHelpStrings.insert(std::make_pair("grantmessagecensorpermission",
+        "grantmessagecensorpermission\n"
+        "\nGrant a wallet address permission to censor a message\n"
+        "\nArguments:\n"
+        "1. \"from-address\"                (string, required) Address of the badge creator\n"
+        "2. \"txid\"                        (string, required) Txid of board to be granted permission\n"
+        "3. \"data\"                        (string, required) Address to grant censor permission\n"
+        "\nExample:\n"
+        + HelpExampleCli("grantmessagecensorpermission", "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd 5d06edd7a0dbd0d83478c25fbf30cf3f07ceac45d9ced1591f6bd982fb878647 144hgKYSWTCXrn889jRvc1MERgdebwChJxdUdG")
+    ));
+    mapHelpStrings.insert(std::make_pair("revokemessagecensorpermission",
+        "revokemessagecensorpermission\n"
+        "\nRevoke a wallet address permission to censor a message\n"
+        "\nArguments:\n"
+        "1. \"from-address\"                (string, required) Address of the badge creator\n"
+        "2. \"txid\"                        (string, required) Txid of board to be granted permission\n"
+        "3. \"data\"                        (string, required) Address to revoke censor permission\n"
+        "\nExample:\n"
+        + HelpExampleCli("revokemessagecensorpermission", "1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd 5d06edd7a0dbd0d83478c25fbf30cf3f07ceac45d9ced1591f6bd982fb878647 144hgKYSWTCXrn889jRvc1MERgdebwChJxdUdG")
     ));
     mapHelpStrings.insert(std::make_pair("annotatebadge",
         "annotatebadge\n"

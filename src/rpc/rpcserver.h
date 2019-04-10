@@ -203,6 +203,11 @@ extern json_spirit::Value requestauthority(const json_spirit::Array& params, boo
 extern json_spirit::Value annotaterecord(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value revokerecord(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value writerecord(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value createbulletinboard(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value writebulletinboardentry(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value censormessage(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value grantmessagecensorpermission(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value revokemessagecensorpermission(const json_spirit::Array& params, bool fHelp);
 extern bool haspermission(std::string address, std::string permission);
 extern bool multisighaspermission(std::string address, std::string permission);
 extern bool txsenderisminer(const CTransaction& tx);

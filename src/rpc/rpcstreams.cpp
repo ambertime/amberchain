@@ -1607,6 +1607,102 @@ Value writerecord(const Array& params, bool fHelp)
     return createrawsendfrom(ext_params, fHelp);
 }
 
+/* AMB START */
+// param0 - from-address
+// param1 - key
+// param2 - encrypted data
+// param3 - encrypted private key
+Value createbulletinboard(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 4)
+        throw runtime_error("Help message not found\n");
+
+    Object content;
+
+    content.push_back(Pair("data",params[2]));
+    content.push_back(Pair("encrypted-key",params[3]));
+
+    const Value& json_data = content;
+    const std::string string_data = write_string(json_data, false);
+    
+    std::string hex_data = HexStr(string_data.begin(), string_data.end());
+
+    Object raw_data;
+    raw_data.push_back(Pair("for", STREAM_BULLETINBOARDS));
+    raw_data.push_back(Pair("key", params[1]));
+    raw_data.push_back(Pair("data", hex_data));
+
+    Array ext_params;
+
+    Object addresses;
+    Array dataArray;
+    dataArray.push_back(raw_data);
+    ext_params.push_back(params[0]); // from-address
+    ext_params.push_back(addresses); // addresses
+    ext_params.push_back(dataArray); // data array
+
+    return createrawsendfrom(ext_params, fHelp);
+}
+
+/* AMB START */
+// param0 - from_address
+// param1 - key
+// param2 - encrypted data
+Value writebulletinboardentry(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 3)
+        throw runtime_error("Help message not found\n");
+
+    Object content;
+
+    content.push_back(Pair("data",params[2]));
+
+    const Value& json_data = content;
+    const std::string string_data = write_string(json_data, false);
+    
+    std::string hex_data = HexStr(string_data.begin(), string_data.end());
+
+    Object raw_data;
+    raw_data.push_back(Pair("for", STREAM_BULLETINBOARDS));
+    raw_data.push_back(Pair("key", params[1]));
+    raw_data.push_back(Pair("data", hex_data));
+
+    Array ext_params;
+
+    Object addresses;
+    Array dataArray;
+    dataArray.push_back(raw_data);
+    ext_params.push_back(params[0]); // from-address
+    ext_params.push_back(addresses); // addresses
+    ext_params.push_back(dataArray); // data array
+
+    return createrawsendfrom(ext_params, fHelp);
+}
+
+/* AMB START */
+// param0 - from_address
+// param1 - key
+Value censormessage(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 2)
+        throw runtime_error("Help message not found\n");
+
+    Object raw_data;
+    raw_data.push_back(Pair("for", STREAM_CENSOREDMESSAGES));
+    raw_data.push_back(Pair("key", params[1]));
+
+    Array ext_params;
+
+    Object addresses;
+    Array dataArray;
+    dataArray.push_back(raw_data);
+    ext_params.push_back(params[0]); // from-address
+    ext_params.push_back(addresses); // addresses
+    ext_params.push_back(dataArray); // data array
+
+    return createrawsendfrom(ext_params, fHelp);
+}
+
 // param1 - from-address
 // param2 - previous stream id
 // param3 - encrypted data
@@ -2202,6 +2298,115 @@ Value revokebadgeissuerpermission(const Array& params, bool fHelp)
         throw runtime_error("Unauthorized address\n");
     }
 }
+
+//START GRANT REVOKE CENSOR
+
+// param0 - from_address
+// param1 - key
+// param2 - data
+// param3 - "grant | revoke"
+
+// param1 - badge creator
+// param2 - badge transaction id found in rootbadges
+// param3 - address of badge issuer
+// param4 - badge issuer permission
+
+Value writemessagecensorpermission(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 4)
+        throw runtime_error("Help message not found\n");
+
+    Array keyTxidParams;
+    Array keyAddressParams;
+    Array AddressDataArray;
+    Array TxidDataArray;
+
+    Object keyTxidData;
+    Object keyAddressData;
+
+    Object addresses;
+
+    Object contentEntry1;
+
+    contentEntry1.push_back(Pair("data",params[2]));
+    contentEntry1.push_back(Pair("permission",params[3]));
+
+    const Value& json_dataEntry1 = contentEntry1;
+    const std::string string_dataEntry1 = write_string(json_dataEntry1, false);
+    
+    std::string hex_dataEntry1 = HexStr(string_dataEntry1.begin(), string_dataEntry1.end());
+
+    keyTxidData.push_back(Pair("for", STREAM_CENSORINGRIGHTS));
+    keyTxidData.push_back(Pair("key", params[1]));
+    keyTxidData.push_back(Pair("data", hex_dataEntry1));
+
+    TxidDataArray.push_back(keyTxidData);
+    keyTxidParams.push_back(params[0]); // from-address
+    keyTxidParams.push_back(addresses); // addresses
+    keyTxidParams.push_back(TxidDataArray); // data array
+
+    Object contentEntry2;
+
+    contentEntry2.push_back(Pair("data",params[1]));
+    contentEntry2.push_back(Pair("permission",params[3]));
+
+    const Value& json_dataEntry2 = contentEntry2;
+    const std::string string_dataEntry2 = write_string(json_dataEntry2, false);
+    
+    std::string hex_dataEntry2 = HexStr(string_dataEntry2.begin(), string_dataEntry2.end());
+
+    keyAddressData.push_back(Pair("for", STREAM_CENSORINGRIGHTS));
+    keyAddressData.push_back(Pair("key", params[2]));
+    keyAddressData.push_back(Pair("data", hex_dataEntry2));
+
+    AddressDataArray.push_back(keyAddressData);
+    keyAddressParams.push_back(params[0]); // from-address
+    keyAddressParams.push_back(addresses); // addresses
+    keyAddressParams.push_back(AddressDataArray); // data array
+
+    createrawsendfrom(keyTxidParams, fHelp);
+    return createrawsendfrom(keyAddressParams, fHelp);
+}
+
+// param0 - from_address
+// param1 - key
+// param2 - data
+Value grantmessagecensorpermission(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 3)
+        throw runtime_error("Help message not found\n");
+
+    Array ext_params;
+
+    BOOST_FOREACH(const Value& value, params)
+    {
+        ext_params.push_back(value);
+    }
+    ext_params.push_back("grant");
+
+    return writemessagecensorpermission(ext_params, fHelp);
+}
+
+// param0 - from_address
+// param1 - key
+// param2 - data
+Value revokemessagecensorpermission(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 3)
+        throw runtime_error("Help message not found\n");
+
+    Array ext_params;
+
+    BOOST_FOREACH(const Value& value, params)
+    {
+        ext_params.push_back(value);
+    }
+    ext_params.push_back("revoke");
+
+    return writemessagecensorpermission(ext_params, fHelp);
+}
+
+//END GRAND REVOKE CENSOR
 
 // param1 - badge creator
 // param2 - badge transaction id found in rootbadges
