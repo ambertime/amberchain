@@ -86,14 +86,6 @@ Refer to the original multichain instructions [here](multichain-README.md)
     # amberchain/src >
     ./amberchain-cli <chain name>
     # ie: ./amberchain-cli amber-testchain
-    ```
-    * You can run the _help_ command in the CLI to see a list of APIs
-    * help <API name> shows a detailed description of th API and parameters
-    ```python
-    # amber-testchain >
-    help
-    help listaddresses 
-    ```
 
 6. Stop the Chain
 
